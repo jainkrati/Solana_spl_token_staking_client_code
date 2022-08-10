@@ -26,17 +26,21 @@ const Home: NextPage = () => {
         console.log('Mint address', TOKEN_MINT_ADDRESS)
         const mint = new web3.PublicKey(TOKEN_MINT_ADDRESS);
 
-            const userAta = await token.getAssociatedTokenAddress(
+            const userAta = await token.getOrCreateAssociatedTokenAccount(
+                connection,
+                publicKey,
                 mint,
                 publicKey
             )
-            const stakingProgramAssociatedTokenAccount = await token.getAssociatedTokenAddress(
+            const stakingProgramAssociatedTokenAccount = await token.getOrCreateAssociatedTokenAccount(
+                connection,
+                publicKey,
                 mint,
                 stakingProgram
             )
 
-            console.log('userAta', userAta.toString())
-            console.log('stakingProgramAssociatedTokenAccount', stakingProgramAssociatedTokenAccount.toString())
+            console.log('userAta', userAta.address.toString())
+            console.log('stakingProgramAssociatedTokenAccount', stakingProgramAssociatedTokenAccount.address.toString())
 
         // add staking instruction
         const instruction = new web3.TransactionInstruction({
@@ -47,14 +51,14 @@ const Home: NextPage = () => {
                     isWritable: true,
                 },
                 {
-                    is_signer: true,
+                    is_signer: false,
                     is_writable: true,
-                    pubkey: userAta,
+                    pubkey: userAta.address,
                 },
                 {
-                    is_signer: true,
+                    is_signer: false,
                     is_writable: true,
-                    pubkey: stakingProgramAssociatedTokenAccount,
+                    pubkey: stakingProgramAssociatedTokenAccount.address,
                 },
                 {
                     is_signer: false,
