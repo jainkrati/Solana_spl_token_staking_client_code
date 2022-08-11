@@ -45,26 +45,10 @@ const Home: NextPage = () => {
         // add staking instruction
         const instruction = new web3.TransactionInstruction({
             keys: [
-                {
-                    pubkey: publicKey,
-                    isSigner: true,
-                    isWritable: true,
-                },
-                {
-                    is_signer: false,
-                    is_writable: true,
-                    pubkey: userAta.address,
-                },
-                {
-                    is_signer: false,
-                    is_writable: true,
-                    pubkey: stakingProgramAssociatedTokenAccount.address,
-                },
-                {
-                    is_signer: false,
-                    is_writable: false,
-                    pubkey: token.TOKEN_PROGRAM_ID,
-                },
+            {pubkey: publicKey, isSigner: true, isWritable: true},
+            {pubkey: userAta.address, isSigner: false, isWritable: true},
+            {pubkey: stakingProgramAssociatedTokenAccount.address, isSigner: false, isWritable: true},
+            {pubkey: token.TOKEN_PROGRAM_ID, isSigner: false, isWritable: false},
             ],
             programId: stakingProgram
         })
